@@ -23,5 +23,27 @@ public class CursoService {
         return cursoRepository.findById(id);
     }
 
+    public boolean eliminarCurso(Long id){
+
+        if(cursoRepository.existsById(id)){
+            cursoRepository.deleteById(id);
+
+            return true;
+        }
+
+        return false;
+
+    }
+
+    public Optional<Curso> actualizarCurso(Long id, Curso nuevoCurso){
+
+        return cursoRepository.findById(id).map(cursoExistente -> {
+           cursoExistente.setNombre(nuevoCurso.getNombre());
+           cursoExistente.setDuracionEnSemanas(nuevoCurso.getDuracionEnSemanas());
+
+           return cursoRepository.save(cursoExistente);
+        });
+
+    }
 
 }

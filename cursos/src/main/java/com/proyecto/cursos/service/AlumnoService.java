@@ -16,19 +16,37 @@ public class AlumnoService {
     private AlumnoRepository alumnoRepository;
 
 
-    public Optional<Alumno> saveAlumno(Alumno alumno){
+    public Optional<Alumno> saveAlumno(Alumno alumno) {
         // acá hay que corroborar que el mail no exista
 
         return Optional.of(alumnoRepository.save(alumno));
     }
 
-    public Optional<Alumno> getById(Long id){
+    public Optional<Alumno> getById(Long id) {
 
         return alumnoRepository.findById(id);
     }
 
-    public List<Alumno> getAll(){
+    public List<Alumno> getAll() {
         return alumnoRepository.findAll();
+    }
+
+    public Optional<Alumno> actualizarAlumno(Long id, Alumno nuevoAlumno) {
+        return alumnoRepository.findById(id).map(alumnoExistente -> {
+            alumnoExistente.setNombre(nuevoAlumno.getNombre());
+            alumnoExistente.setApellido(nuevoAlumno.getApellido());
+            alumnoExistente.setEmail(nuevoAlumno.getEmail());
+
+            return alumnoRepository.save(alumnoExistente);
+        });
+    }
+
+    public boolean eliminarAlumno(Long id){
+        if(alumnoRepository.existsById(id)){
+            alumnoRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 
 }
